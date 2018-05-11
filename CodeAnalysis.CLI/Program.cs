@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CodeAnalysis;
 using CodeAnalysis.Interfaces;
 
-namespace CodeAnalyser.CLI
+namespace CodeAnalysis.CLI
 {
     class Program
     {
-        #region Methods
-
-        #region Static Methods
-
         /// <summary>
         /// Handles the analysers.
         /// </summary>
@@ -30,22 +25,11 @@ namespace CodeAnalyser.CLI
                 }
             }
         }
-
-        /// <summary>
-        /// Mains the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
         static void Main(string[] args)
         {
-            //fetch arguments
-            //analyse
             HandleAnalysers();
-            Console.WriteLine("Done... press any key to exit.");
+            Console.WriteLine("Press the any key");
             Console.ReadKey();
         }
-
-        #endregion
-
-        #endregion
     }
 }
