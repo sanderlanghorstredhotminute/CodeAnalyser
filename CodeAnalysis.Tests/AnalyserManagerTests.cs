@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using CodeAnalysis.Analysers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CodeAnalysis.Tests
@@ -7,6 +8,7 @@ namespace CodeAnalysis.Tests
     [TestClass]
     public class AnalyserManagerTests
     {
+        public string TestBinaryLocation => Directory.GetCurrentDirectory() + "\\Binaries\\RecursionTest.exe";
         #region Methods
 
         /// <summary>
@@ -15,9 +17,19 @@ namespace CodeAnalysis.Tests
         [TestMethod]
         public void GetRecursiveAnalyserTest()
         {
-            using (var analyser = AnalyserManager.GetRecursiveAnalyser(Directory.GetCurrentDirectory() + "\\Binaries\\RecursionTest.exe"))
+            using (var analyser = AnalyserManager.GetRecursiveAnalyser(TestBinaryLocation))
             {
                 Assert.IsNotNull(analyser);
+            }
+        }
+
+        [TestMethod]
+        public void Test_DependencyAnalyser_Result()
+        {
+            using (var analyser = new DependencyAnalyser(TestBinaryLocation))
+            {
+                var result = analyser.AnalyseAssembly();
+                Assert.IsTrue(result.Any());
             }
         }
 
