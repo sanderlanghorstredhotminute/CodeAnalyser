@@ -2,7 +2,7 @@
 using System.Linq;
 using CodeAnalysis.Model;
 
-namespace CodeAnalysis.Classes
+namespace CodeAnalysis.Analysers.Dependency
 {
     public sealed class DependencyResult : IAnalyserResult
     {

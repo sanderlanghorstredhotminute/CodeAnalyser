@@ -1,23 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using CodeAnalysis.Classes;
-using CodeAnalysis.Classes.Helpers;
-using CodeAnalysis.Interfaces;
+using CodeAnalysis.Model;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-namespace CodeAnalysis.Analysers
+namespace CodeAnalysis.Analysers.Recursive
 {
     public sealed class RecursiveAnalyser : IAnalyser
     {
-        #region Fields
-
-        private ModuleDefinition _assembly;
-        private DefaultAssemblyResolver _resolver;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
@@ -33,14 +23,9 @@ namespace CodeAnalysis.Analysers
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecursiveAnalyser" /> class.
         /// </summary>
-        /// <param name="filepath">The filepath.</param>
-        public RecursiveAnalyser(string filepath)
+        public RecursiveAnalyser()
         {
-            _resolver = new DefaultAssemblyResolver();
-            _resolver.AddSearchDirectory(Path.GetDirectoryName(filepath));
-            _assembly = ModuleDefinition.ReadModule(filepath, new ReaderParameters {AssemblyResolver = _resolver});
             MaxDepth = SettingsHelper.MaxRecursiveLevel;
         }
 
@@ -49,24 +34,13 @@ namespace CodeAnalysis.Analysers
         #region Methods
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            _resolver.Dispose();
-            _resolver = null;
-            _assembly.Dispose();
-            _assembly = null;
-        }
-
-        /// <summary>
         /// Analyses the assembly.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IAnalyserResult> AnalyseAssembly()
+        public IEnumerable<IAnalyserResult> AnalyseAssembly(ModuleDefinition assembly)
         {
             var calls =
-                (from type in _assembly.Types
+                (from type in assembly.Types
                  from caller in type.Methods
                  where caller != null && caller.Body != null
                  from instruction in caller.Body.Instructions

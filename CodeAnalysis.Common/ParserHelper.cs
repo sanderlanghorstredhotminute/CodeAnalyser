@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 
-namespace CodeAnalysis.Classes.Helpers
+namespace CodeAnalysis.Common
 {
-    internal static class ParserHelper
+    public static class ParserHelper
     {
         #region Methods
 
@@ -23,7 +23,7 @@ namespace CodeAnalysis.Classes.Helpers
             int output;
             return int.TryParse(input.ToString(), out output) ? output : defaultValue;
         }
-        
+
         #endregion
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace CodeAnalysis.Interfaces
+namespace CodeAnalysis.Model
 {
     public interface IAnalyserResult
     {

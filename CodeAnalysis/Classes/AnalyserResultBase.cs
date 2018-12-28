@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using CodeAnalysis.Interfaces;
+using CodeAnalysis.Model;
 
 namespace CodeAnalysis.Classes
 {

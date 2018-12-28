@@ -1,7 +1,7 @@
 using System.Configuration;
 using System.Linq;
 
-namespace CodeAnalysis.Classes.ConfigSection
+namespace CodeAnalysis.Analysers.Recursive.ConfigSection
 {
     public sealed class DocumentedElement : ElementBase
     {

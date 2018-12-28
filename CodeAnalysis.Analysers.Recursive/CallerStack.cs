@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace CodeAnalysis.Classes
+namespace CodeAnalysis.Analysers.Recursive
 {
     internal sealed class CallerStack
     {

@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace CodeAnalysis.Classes.ConfigSection
+namespace CodeAnalysis.Analysers.Recursive.ConfigSection
 {
     public sealed class ConfigCollection<T> : ConfigurationElementCollection where T : ElementBase, new()
     {

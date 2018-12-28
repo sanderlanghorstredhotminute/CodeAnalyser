@@ -1,10 +1,19 @@
 ﻿using System.Linq;
 using System.Text;
+using CodeAnalysis.Model;
 
-namespace CodeAnalysis.Classes
+namespace CodeAnalysis.Analysers.Recursive
 {
-    internal sealed class RecursiveResult : AnalyserResultBase
+    internal sealed class RecursiveResult : IAnalyserResult
     {
+        #region Properties
+
+        public string Details { get; }
+        public bool Documented { get; }
+        public string Result { get; }
+
+        #endregion
+
         #region Constructors
 
         /// <summary>

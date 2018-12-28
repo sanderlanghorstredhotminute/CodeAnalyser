@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CodeAnalysis.Analysers.Dependency\CodeAnalysis.Analysers.Dependency.csproj" />
+    <ProjectReference Include="..\CodeAnalysis.Analysers.Recursive\CodeAnalysis.Analysers.Recursive.csproj" />
     <ProjectReference Include="..\CodeAnalysis\CodeAnalysis.csproj" />
   </ItemGroup>
 

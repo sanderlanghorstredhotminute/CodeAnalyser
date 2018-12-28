@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Mono.Cecil;
 
-namespace CodeAnalysis.Classes
+namespace CodeAnalysis.Analysers.Recursive
 {
     internal sealed class CallProfile
     {

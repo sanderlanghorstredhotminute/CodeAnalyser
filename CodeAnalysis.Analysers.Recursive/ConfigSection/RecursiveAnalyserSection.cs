@@ -1,8 +1,8 @@
 using System.Configuration;
-using CodeAnalysis.Classes.Helpers;
+using CodeAnalysis.Common;
 using System.Linq;
 
-namespace CodeAnalysis.Classes.ConfigSection
+namespace CodeAnalysis.Analysers.Recursive.ConfigSection
 {
     public sealed class RecursiveAnalyserSection : ConfigurationSection
     {

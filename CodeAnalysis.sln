@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalysis", "CodeAnalysis\CodeAnalysis.csproj", "{65368C9E-C67C-452D-A813-45C80F3DB466}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Tests", "CodeAnalysis.Tests\CodeAnalysis.Tests.csproj", "{CF9AD0E3-7DF5-4A0C-B8C3-AFFC21A5E56A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalysis.Tests", "CodeAnalysis.Tests\CodeAnalysis.Tests.csproj", "{CF9AD0E3-7DF5-4A0C-B8C3-AFFC21A5E56A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{675C2F38-1CF1-4C7A-88B2-26054653710C}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,7 +13,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.CLI", "CodeAnalysis.CLI\CodeAnalysis.CLI.csproj", "{1576832A-B165-4FC0-8740-C5384BB9FB15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalysis.CLI", "CodeAnalysis.CLI\CodeAnalysis.CLI.csproj", "{1576832A-B165-4FC0-8740-C5384BB9FB15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analysers", "Analysers", "{7A4AE414-A106-4413-89E9-C940D133B371}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalysis.Analysers.Recursive", "CodeAnalysis.Analysers.Recursive\CodeAnalysis.Analysers.Recursive.csproj", "{315746AB-3440-4871-9437-F39E9F62E503}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{D55AD7E5-0550-46B6-96FA-9D8630030B79}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\Mono.Cecil.dll = Binaries\Mono.Cecil.dll
+		Binaries\Mono.Cecil.Mdb.dll = Binaries\Mono.Cecil.Mdb.dll
+		Binaries\Mono.Cecil.Pdb.dll = Binaries\Mono.Cecil.Pdb.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Analysers.Dependency", "CodeAnalysis.Analysers.Dependency\CodeAnalysis.Analysers.Dependency.csproj", "{1DF3AA3D-33EA-4495-9D70-8597DE155AA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Common", "CodeAnalysis.Common\CodeAnalysis.Common.csproj", "{28F5279D-CD04-49B6-A8E1-4E42CD88DB01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +48,26 @@ Global
 		{1576832A-B165-4FC0-8740-C5384BB9FB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1576832A-B165-4FC0-8740-C5384BB9FB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1576832A-B165-4FC0-8740-C5384BB9FB15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{315746AB-3440-4871-9437-F39E9F62E503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{315746AB-3440-4871-9437-F39E9F62E503}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{315746AB-3440-4871-9437-F39E9F62E503}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{315746AB-3440-4871-9437-F39E9F62E503}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DF3AA3D-33EA-4495-9D70-8597DE155AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DF3AA3D-33EA-4495-9D70-8597DE155AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DF3AA3D-33EA-4495-9D70-8597DE155AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DF3AA3D-33EA-4495-9D70-8597DE155AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F5279D-CD04-49B6-A8E1-4E42CD88DB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F5279D-CD04-49B6-A8E1-4E42CD88DB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F5279D-CD04-49B6-A8E1-4E42CD88DB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F5279D-CD04-49B6-A8E1-4E42CD88DB01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{315746AB-3440-4871-9437-F39E9F62E503} = {7A4AE414-A106-4413-89E9-C940D133B371}
+		{D55AD7E5-0550-46B6-96FA-9D8630030B79} = {675C2F38-1CF1-4C7A-88B2-26054653710C}
+		{1DF3AA3D-33EA-4495-9D70-8597DE155AA2} = {7A4AE414-A106-4413-89E9-C940D133B371}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06E06566-F66B-4115-9C29-C7F7751093C3}

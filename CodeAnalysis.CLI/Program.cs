@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CodeAnalysis.Interfaces;
+using CodeAnalysis.Analysers.Recursive;
+using CodeAnalysis.Model;
 
 namespace CodeAnalysis.CLI
 {
     class Program
     {
+        #region Methods
+
+        #region Static Methods
+
         /// <summary>
         /// Handles the analysers.
         /// </summary>
         private static void HandleAnalysers()
         {
             var results = new List<IAnalyserResult>();
-            using (var analyser = AnalyserManager.GetRecursiveAnalyser(@"C:\Workspaces\Valk\VanDerValk Platform\Valk.Businesslayer\bin\Debug\Valk.Businesslayer.dll"))
+            using (var analyser = new AssemblyAnalyser(@"C:\Workspaces\Valk\VanDerValk Platform\Valk.Businesslayer\bin\Debug\Valk.Businesslayer.dll"))
             {
-                results.AddRange(analyser.AnalyseAssembly());
+                analyser.AddAnalyser(new RecursiveAnalyser());
+                results.AddRange(analyser.GetResults());
             }
             if (results.Any())
             {
@@ -25,11 +31,16 @@ namespace CodeAnalysis.CLI
                 }
             }
         }
+
         static void Main(string[] args)
         {
             HandleAnalysers();
             Console.WriteLine("Press the any key");
             Console.ReadKey();
         }
+
+        #endregion
+
+        #endregion
     }
 }
