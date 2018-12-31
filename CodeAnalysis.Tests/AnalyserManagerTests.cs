@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Reflection;
 using CodeAnalysis.Analysers.Dependency;
 using CodeAnalysis.Analysers.Recursive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,6 +28,17 @@ namespace CodeAnalysis.Tests
                 var results = analyser.GetResults();
                 Assert.IsNotNull(results);
             }
+        }
+
+        [TestMethod]
+        public void CurrentAssemblyDependencyCheck()
+        {
+            using (var analyser = new AssemblyAnalyser(Assembly.GetExecutingAssembly().Location))
+            {
+                analyser.AddAnalyser(new DependencyAnalyser());
+                var dependencies = analyser.GetResults().OfType<DependencyResult>();
+            }
+            
         }
 
         #endregion

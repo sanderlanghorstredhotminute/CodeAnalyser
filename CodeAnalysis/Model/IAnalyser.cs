@@ -12,7 +12,7 @@ namespace CodeAnalysis.Model
         /// Analyses the assembly.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IAnalyserResult> AnalyseAssembly(ModuleDefinition definition);
+        IEnumerable<IAnalyserResult> AnalyseAssembly(IModuleLoader loader);
 
         #endregion
     }

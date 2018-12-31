@@ -8,11 +8,11 @@ namespace CodeAnalysis.Analysers.Dependency
     {
         #region Properties
 
-        public IEnumerable<string> Dependents { get; set; }
+        public IEnumerable<TypeReference> Dependents { get; set; }
         public string Details { get; }
         public bool Documented { get; }
         public string Result { get; }
-        public string Type { get; set; }
+        public TypeReference Type { get; set; }
 
         #endregion
     }

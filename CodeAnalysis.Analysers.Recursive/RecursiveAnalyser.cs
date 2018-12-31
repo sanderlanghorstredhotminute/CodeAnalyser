@@ -37,10 +37,11 @@ namespace CodeAnalysis.Analysers.Recursive
         /// Analyses the assembly.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IAnalyserResult> AnalyseAssembly(ModuleDefinition assembly)
+        public IEnumerable<IAnalyserResult> AnalyseAssembly(IModuleLoader loader)
         {
+            var module = loader.GetModule();
             var calls =
-                (from type in assembly.Types
+                (from type in module.Types
                  from caller in type.Methods
                  where caller != null && caller.Body != null
                  from instruction in caller.Body.Instructions

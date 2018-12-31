@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeAnalysis.Model;
-using Mono.Cecil;
 
 namespace CodeAnalysis
 {
@@ -11,9 +10,8 @@ namespace CodeAnalysis
     {
         #region Fields
 
-        private readonly IList<IAnalyser> _analysers = new List<IAnalyser>();
-        private ModuleDefinition _assembly;
-        private DefaultAssemblyResolver _resolver;
+        private IList<IAnalyser> _analysers = new List<IAnalyser>();
+        private IModuleLoader _assemblyLoader;
 
         #endregion
 
@@ -27,8 +25,7 @@ namespace CodeAnalysis
 
         public AssemblyAnalyser(string path)
         {
-            Path = path;
-            LoadAssembly();
+            _assemblyLoader = new ModuleLoader(path);
         }
 
         #endregion
@@ -44,10 +41,9 @@ namespace CodeAnalysis
 
         public void Dispose()
         {
-            _resolver.Dispose();
-            _resolver = null;
-            _assembly.Dispose();
-            _assembly = null;
+            _assemblyLoader.Dispose();
+            _assemblyLoader = null;
+            _analysers = null;
         }
 
         public IEnumerable<IAnalyserResult> GetResults()
@@ -55,7 +51,7 @@ namespace CodeAnalysis
             var results = new List<IAnalyserResult>();
             foreach (var analyser in _analysers)
             {
-                results.AddRange(analyser.AnalyseAssembly(_assembly));
+                results.AddRange(analyser.AnalyseAssembly(_assemblyLoader));
             }
             return results;
         }
@@ -63,13 +59,6 @@ namespace CodeAnalysis
         public async Task<IEnumerable<IAnalyserResult>> GetResultsAsync(IProgress<int> progress, CancellationToken ct)
         {
             throw new NotImplementedException();
-        }
-
-        private void LoadAssembly()
-        {
-            _resolver = new DefaultAssemblyResolver();
-            _resolver.AddSearchDirectory(System.IO.Path.GetDirectoryName(Path));
-            _assembly = ModuleDefinition.ReadModule(Path, new ReaderParameters {AssemblyResolver = _resolver});
         }
 
         #endregion
