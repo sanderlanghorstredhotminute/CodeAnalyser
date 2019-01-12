@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using CodeAnalysis.Analysers.Dependency.Result;
 using CodeAnalysis.Model;
 
 namespace CodeAnalysis.Analysers.Dependency
@@ -8,11 +8,10 @@ namespace CodeAnalysis.Analysers.Dependency
     {
         #region Properties
 
-        public IEnumerable<TypeReference> Dependents { get; set; }
-        public string Details { get; }
-        public bool Documented { get; }
-        public string Result { get; }
-        public TypeReference Type { get; set; }
+        public AssemblyDefinition Definition { get; set; }
+        public string Details => Result;
+        public bool Documented => false;
+        public string Result => string.Concat(Definition.Name, ": ", string.Join(", ", Definition.Classes.SelectMany(c => c.Methods.SelectMany(m => m.Dependencies))));
 
         #endregion
     }

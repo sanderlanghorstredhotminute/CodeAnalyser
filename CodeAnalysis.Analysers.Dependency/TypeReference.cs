@@ -1,11 +1,20 @@
-﻿namespace CodeAnalysis.Analysers.Dependency
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace CodeAnalysis.Analysers.Dependency
 {
-    public class TypeReference
+    internal sealed class TypeReference
     {
         #region Properties
 
         public string Class { get; set; }
+
         public string Method { get; set; }
+
+        public string Namespace { get; set; }
+
+        public IEnumerable<TypeReference> References { get; set; }
+
         public string Scope { get; set; }
 
         #endregion
@@ -32,6 +41,11 @@
                 hashCode = (hashCode * 397) ^ (Scope != null ? Scope.GetHashCode() : 0);
                 return hashCode;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"[{nameof(TypeReference)}]{Scope}: {Namespace}.{Class}..{Method} ({References.Count()})";
         }
 
         protected bool Equals(TypeReference other)

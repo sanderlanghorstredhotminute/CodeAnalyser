@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CodeAnalysis.Analysers.Dependency.Result;
 using CodeAnalysis.Model;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -12,11 +13,13 @@ namespace CodeAnalysis.Analysers.Dependency
 
         private static readonly OpCode[] FilteredOpCodes = {OpCodes.Call, OpCodes.Callvirt, OpCodes.Newobj};
 
-        private static readonly string[] InternalModules = {"Mono.Cecil", "Mono.Cecil.Mdb", "Mono.Cecil.Pdb"};
+        private static readonly string[] InternalModules = {"Mono.Cecil.dll", "Mono.Cecil.Mdb.dll", "Mono.Cecil.Pdb.dll"};
 
         #endregion
 
         #region Properties
+
+        public bool IncludeSelfReferences { get; set; }
 
         public bool IncludeSystemTypes { get; set; }
 
@@ -24,14 +27,12 @@ namespace CodeAnalysis.Analysers.Dependency
 
         #region Constructors
 
-        public DependencyAnalyser()
-        {
-            IncludeSystemTypes = false;
-        }
+        public DependencyAnalyser() { }
 
-        public DependencyAnalyser(bool includeSystemTypes)
+        public DependencyAnalyser(DependencyOptions options)
         {
-            IncludeSystemTypes = includeSystemTypes;
+            IncludeSystemTypes = options.HasFlag(DependencyOptions.IncludeSystemTypes);
+            IncludeSelfReferences = options.HasFlag(DependencyOptions.IncludeSelfReferences);
         }
 
         #endregion
@@ -41,6 +42,7 @@ namespace CodeAnalysis.Analysers.Dependency
         public IEnumerable<IAnalyserResult> AnalyseAssembly(IModuleLoader loader)
         {
             var result = new List<DependencyResult>();
+            var references = new List<TypeReference>();
             var loadedModules = new List<ModuleDefinition>();
             var unloadedModules = new Queue<string>();
             unloadedModules.Enqueue(null);
@@ -53,10 +55,10 @@ namespace CodeAnalysis.Analysers.Dependency
                     continue;
 
                 var deps = GetDependencies(module).ToList();
-                result.AddRange(deps);
+                references.AddRange(deps);
                 loadedModules.Add(module);
 
-                foreach (var scopeName in deps.SelectMany(d => d.Dependents.Select(dd => dd.Scope)).Distinct())
+                foreach (var scopeName in deps.SelectMany(d => d.References.Select(dd => dd.Scope)).Distinct())
                 {
                     if (InternalModules.Contains(scopeName))
                         continue;
@@ -68,10 +70,19 @@ namespace CodeAnalysis.Analysers.Dependency
                 }
             }
 
+            if (references.Any())
+            {
+                result = Mapper.MapResults(references)
+                               .Select(r => new DependencyResult
+                               {
+                                   Definition = r
+                               }).ToList();
+            }
+
             return result;
         }
 
-        private IEnumerable<DependencyResult> GetDependencies(ModuleDefinition module)
+        private IEnumerable<TypeReference> GetDependencies(ModuleDefinition module)
         {
             foreach (var typeDefinition in module.Types.Where(t => t.IsClass))
             {
@@ -80,22 +91,18 @@ namespace CodeAnalysis.Analysers.Dependency
                     var references = methodDefinition.Body.Instructions
                                                      .Where(i => FilteredOpCodes.Contains(i.OpCode))
                                                      .Select(i => i.Operand).OfType<MethodReference>()
-                                                     .Where(mr => mr.DeclaringType != typeDefinition
-                                                                  && (IncludeSystemTypes || !mr.DeclaringType.Scope.Name.StartsWith("System"))
-                                                                  && !InternalModules.Contains(mr.DeclaringType.Scope.Name))
+                                                     .Where(mr => IsValidType(typeDefinition, mr))
                                                      .ToList();
                     if (!references.Any())
                         continue;
 
-                    yield return new DependencyResult
+                    yield return new TypeReference
                     {
-                        Type = new TypeReference
-                        {
-                            Scope = typeDefinition.Scope.Name,
-                            Class = typeDefinition.Name,
-                            Method = methodDefinition.Name
-                        },
-                        Dependents = references.Select(reference => new TypeReference
+                        Scope = typeDefinition.Scope.Name,
+                        Class = typeDefinition.Name,
+                        Namespace = typeDefinition.Namespace,
+                        Method = methodDefinition.Name,
+                        References = references.Select(reference => new TypeReference
                         {
                             Scope = $"{reference.DeclaringType.Scope.Name.Replace(".dll", "")}.dll",
                             Class = reference.DeclaringType.Name,
@@ -104,6 +111,20 @@ namespace CodeAnalysis.Analysers.Dependency
                     };
                 }
             }
+        }
+
+        private bool IsValidType(TypeDefinition typeDefinition, MethodReference methodReferene)
+        {
+            if (InternalModules.Contains(methodReferene.DeclaringType.Scope.Name))
+                return false;
+
+            if (!IncludeSelfReferences && methodReferene.DeclaringType == typeDefinition)
+                return false;
+
+            if (!IncludeSystemTypes && methodReferene.DeclaringType.Scope.Name.StartsWith("System"))
+                return false;
+
+            return true;
         }
 
         #endregion

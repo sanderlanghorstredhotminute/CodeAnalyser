@@ -35,7 +35,7 @@ namespace CodeAnalysis.Tests
         {
             using (var analyser = new AssemblyAnalyser(Assembly.GetExecutingAssembly().Location))
             {
-                analyser.AddAnalyser(new DependencyAnalyser());
+                analyser.AddAnalyser(new DependencyAnalyser(DependencyOptions.IncludeSelfReferences));
                 var dependencies = analyser.GetResults().OfType<DependencyResult>();
             }
             
